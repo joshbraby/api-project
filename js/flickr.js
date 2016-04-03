@@ -3,21 +3,11 @@ $(function() {
     var currentYear = new Date();
     $('#footer-date').html("&copy;" + currentYear.getFullYear() + " Josh Braby");
   
-    // $('.footer-button').on('click', function() {
-    //     $.getJSON('https://api.github.com/users/joshbraby/repos')
-    //   .done(function(data) {
-    //     $.each(data, function( key, value ){
-    //       var repoLink = '<li><a href="#" target="_blank">' + value.html_url + '</li>';
-    //         $('.repo-list').append(repoLink);
-    //     });
-    //   });  
-    // });
-
     var $userSearch = $('#user_search');
     $userSearch.val("");
     var flickrAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
     var $currentThumbnail;
-
+    var HTML;
 
     $userSearch.keyup(function() {
 
@@ -37,7 +27,7 @@ $(function() {
 
         function displayPhotos(data) {
 
-            var HTML = "";
+            HTML = "";
 
             $.each(data.items, function(i, photo) {
 
@@ -69,6 +59,8 @@ $(function() {
 
         $currentThumbnail = $(this);
 
+        console.log($currentThumbnail); 
+
     	$overlay.show();
     	$imageIndex = $(this).find("img").attr('src');
         $imageIndex = $imageIndex.substring(0,$imageIndex.length - 6);
@@ -92,14 +84,13 @@ $(function() {
 
         } else {
             $imageIndex = $currentThumbnail.prev().find('img').attr('src');
+            $currentThumbnail = $currentThumbnail.prev();
         }
 
         $imageIndex = $imageIndex.substring(0,$imageIndex.length - 6);
         $imageIndex = $imageIndex + ".jpg";
 
         $overlayIMG.attr('src',$imageIndex);
-
-        $currentThumbnail = $currentThumbnail.prev();
 
     }
 
@@ -110,18 +101,16 @@ $(function() {
         if(getClass === "11") {
             $currentThumbnail = $('.0').parent();
             $imageIndex = $currentThumbnail.find('img').attr('src');
-
         } else {
-            $imageIndex = $currentThumbnail.prev().find('img').attr('src');
+            $imageIndex = $currentThumbnail.next().find('img').attr('src');
+            $currentThumbnail = $currentThumbnail.next();
         }
 
-        $imageIndex = $currentThumbnail.next().find('img').attr('src');
         $imageIndex = $imageIndex.substring(0,$imageIndex.length - 6);
         $imageIndex = $imageIndex + ".jpg";
 
         $overlayIMG.attr('src',$imageIndex);
-
-        $currentThumbnail = $currentThumbnail.next();
+        
 
     }
 

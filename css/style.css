@@ -16,19 +16,6 @@ header {
 	width: 100%;
 	text-align: center;
 }
-/*h1 {
-	font-size: 1.75rem;
-	margin: 0;
-}
-h2 {
-	margin: 0;
-	font-size: 1.25rem;
-}*/
-
-/*.GitHub-logo-container {
-	display: inline-block;
-	width: 1.75rem;
-}*/
 
 header input {
 	width: 28.75rem;
@@ -38,27 +25,40 @@ header input {
 	border-radius: .4rem;
 }
 
+header button {
+	padding: 0.65rem;
+	font-size: 1rem;
+	background: #d9d9d9;
+	border: .125rem solid #d9d9d9;
+	border-radius: .4rem;
+}
+
+header button:active {
+	background: #999;
+	border: .125rem solid #999;
+}
+
 .container {
-	width: 65rem;
+	width: 80%;
 	margin: 0 auto;
 	margin-top: 6.75rem;
 }
 
-.container div {
-	width: 12.5rem;
+.album-container {
+	width: 23%;
 	display: inline-block;
-	margin: 0 1.75rem 2.5rem;
+	margin: 0 1% 2.5rem;
+	font-size: .75rem;
+	text-align: center;
 }
 
 .thumbnail-container {
-	height: 9.375rem;	
-	overflow: hidden;
+	width: 80%;
+	margin: 0 auto;
 }
 
 img {
 	width: 100%;
-	display: fixed;
-	top: 0;
 }
 
 footer {
@@ -102,5 +102,6 @@ footer {
 .overlay p {
 	color: #fff;
 	width: 37.5rem;
-	margin: 0 auto;
+	margin: .5rem auto;
+	text-align: center;
 }
