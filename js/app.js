@@ -15,21 +15,6 @@ $(function () {
     var getClass;
     var $imageIndex;
 
-    $userSearch.bind("enterKey",function(e){
-        submitSearch();
-    });
-
-    $userSearch.keyup(function(e){
-        if(e.keyCode == 13)
-        {
-            submitSearch();
-        }
-    });
-
-    $('button').on('click', function () {
-        submitSearch();
-    })
-
     function submitSearch() {
 
         HTML = "";
@@ -81,12 +66,12 @@ $(function () {
                         albumName.push(imageData.name);
                         prevAlbumName.push(imageData.name);
 
-                        HTML += '<div class="album-container">'
+                        HTML += '<div class="album-container">';
                         HTML += '<div class="thumbnail-container">';
                         HTML += '<img src="' + urlName.url + '" class="' + classCount + '"/>';
                         HTML += '</div>';
                         HTML += '<p>' + imageData.name + '</p>'
-                        HTML += '</div>'
+                        HTML += '</div>';
 
                         classCount++;
 
@@ -105,9 +90,23 @@ $(function () {
         $.getJSON(artistURL, artistAPICallback);
 
     }
+
+    $userSearch.bind("enterKey",function(e){
+        submitSearch();
+    });
+
+    $userSearch.keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            submitSearch();
+        }
+    });
+
+    $('button').on('click', function () {
+        submitSearch();
+    })
         
     var $body = $('body');
-    var $thumbnailIMG = $(".thumbnail-container img");
     $body.append("<div class='overlay'><i class='fa fa-arrow-circle-o-left fa-4x'></i><i class='fa fa-arrow-circle-o-right fa-4x'></i><div><img src='' '/></div><p class='artist-name'></p><p class='album-name'></p><p class='album-release-date'></p></div>");
     var $overlay = $('.overlay');
     $overlay.hide();
