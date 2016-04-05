@@ -15,95 +15,96 @@ $(function () {
     var getClass;
     var $imageIndex;
 
-    function userSearch() {
+    $userSearch.bind("enterKey",function(e){
+        submitSearch();
+    });
+
+    $userSearch.keyup(function(e){
+        if(e.keyCode == 13)
+        {
+            submitSearch();
+        }
+    });
+
+    $('button').on('click', function () {
+        submitSearch();
+    })
+
+    function submitSearch() {
 
         HTML = "";
-
+        
         var search = $userSearch.val();
         search = search.toLowerCase();
-        search = search.replace(" ", "+");
+        search = search.replace(" ","+");
+
+        if(search === "") {
+            HTML = "";
+        }
 
         var artistURL = 'https://api.spotify.com/v1/search?q=' + search + '&type=artist';
 
         var artistAPICallback = function (data) {
 
-            $.each(data, function (key, objectData) {
+            var artistsObject = data.artists;
 
-                var artistObject = objectData.items[0];
+            var artistObject = artistsObject.items[0];
 
-                artistID = artistObject.id;
-                artistName = artistObject.name;
-                artistID.toString();
-                albumURL = 'https://api.spotify.com/v1/artists/' + artistID + '/albums?album_type=album';
+            artistID = artistObject.id;
+            artistName = artistObject.name;
+            artistID.toString();
+            albumURL = 'https://api.spotify.com/v1/artists/' + artistID + '/albums?album_type=album';
 
-            });
+            var albumAPICallback = function (data) {
+                
+                var prevAlbumName = [];
+                albumName = [];
+                albumReleaseDate = [];
+                classCount = 0;
+                
+                $.each(data.items, function (imageID, imageData) {
+
+                    var urlName = imageData.images[0];
+                    var albumsInfo = imageData.href;
+
+                    if (prevAlbumName.indexOf(imageData.name) == -1) {
+
+                        var albumInfoAPICallback = function (albumData) {
+
+                                var releaseDate = albumData.release_date.substring(0,4);
+                                albumReleaseDate.push(releaseDate);
+
+                        }
+
+                        $.getJSON(albumsInfo, albumInfoAPICallback);
+                                
+                        albumName.push(imageData.name);
+                        prevAlbumName.push(imageData.name);
+
+                        HTML += '<div class="album-container">'
+                        HTML += '<div class="thumbnail-container">';
+                        HTML += '<img src="' + urlName.url + '" class="' + classCount + '"/>';
+                        HTML += '</div>';
+                        HTML += '<p>' + imageData.name + '</p>'
+                        HTML += '</div>'
+
+                        classCount++;
+
+                    }
+
+                });
+
+                $('.container').html(HTML);
+                        
+            }
+
+            $.getJSON(albumURL, albumAPICallback);
 
         }
 
         $.getJSON(artistURL, artistAPICallback);
 
-        var albumAPICallback = function (data) {
-            
-            var prevAlbumName = [];
-            albumName = [];
-            albumReleaseDate = [];
-            classCount = 0;
-            
-            $.each(data.items, function (imageID, imageData) {
-
-                var urlName = imageData.images[0];
-                var albumsInfo = imageData.href;
-
-                if (prevAlbumName.indexOf(imageData.name) == -1) {
-
-                    var albumInfoAPICallback = function (albumData) {
-
-                        var releaseDate = albumData.release_date.substring(0,4);
-                        albumReleaseDate.push(releaseDate);
-
-                    }
-
-                    $.getJSON(albumsInfo, albumInfoAPICallback);
-                            
-                    albumName.push(imageData.name);
-                    prevAlbumName.push(imageData.name);
-
-                    HTML += '<div class="album-container">';
-                    HTML += '<div class="thumbnail-container">';
-                    HTML += '<img src="' + urlName.url + '" class="' + classCount + '"/>';
-                    HTML += '</div>';
-                    HTML += '<p>' + imageData.name + '</p>';
-                    HTML += '</div>';
-
-                    classCount++;
-
-                }
-
-            });
-
-            $('.container').html(HTML);
-                    
-        }
-
-        $.getJSON(albumURL, albumAPICallback);
-
     }
-
-    $userSearch.keyup(function (e) {
-        if (e.keyCode === 13)
-        {
-            userSearch();
-        }
-    });
-
-    $userSearch.bind("enterKey",function(e){
-        userSearch();
-    });
-
-
-    $('button').on('click', function () {
-        userSearch();
-    })
         
     var $body = $('body');
     var $thumbnailIMG = $(".thumbnail-container img");
@@ -175,7 +176,5 @@ $(function () {
             slideRight();
         }
     });
-           
-
 
 }); //end document object function
